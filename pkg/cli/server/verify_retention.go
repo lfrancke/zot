@@ -113,6 +113,7 @@ func newVerifyFeatureRetentionCmd(conf *config.Config) *cobra.Command {
 
 			// Initialize MetaDB only if retention policies are configured
 			var metaDB mTypes.MetaDB
+
 			if conf.IsRetentionEnabled() {
 				// Enable retention dry-run mode only when retention is enabled
 				conf.Storage.Retention.DryRun = true
@@ -142,14 +143,17 @@ func newVerifyFeatureRetentionCmd(conf *config.Config) *cobra.Command {
 				}
 
 				metaDB = driver
+
 				logger.Info().Msg("retention policies are configured - retention rules will be applied")
 			} else {
 				metaDB = nil
+
 				logger.Info().Msg("no retention policies are configured - garbage collection will run with default settings")
 			}
 
 			// Initialize scheduler
 			taskScheduler := scheduler.NewScheduler(conf, metricsServer, logger)
+
 			taskScheduler.RunScheduler()
 			defer taskScheduler.Shutdown()
 
@@ -165,7 +169,9 @@ func newVerifyFeatureRetentionCmd(conf *config.Config) *cobra.Command {
 			}
 
 			var waitCtx context.Context
+
 			var cancel context.CancelFunc
+
 
 			if timeout > 0 {
 				logger.Info().Dur("timeout", timeout).Msg("waiting for garbage collection tasks to complete...")
@@ -175,6 +181,7 @@ func newVerifyFeatureRetentionCmd(conf *config.Config) *cobra.Command {
 					"(can be interrupted by SIGINT/SIGTERM)...")
 				waitCtx, cancel = context.WithCancel(cmd.Context())
 			}
+
 			defer cancel()
 
 			// Set up signal handling for graceful shutdown

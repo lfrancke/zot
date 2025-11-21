@@ -47,7 +47,7 @@ func newHTTPMetricsClient() *http.Client {
 	}
 }
 
-// Creates a MetricsClient that can be used to retrieve in memory metrics
+// NewMetricsClient creates a MetricsClient that can be used to retrieve in memory metrics
 // The new MetricsClient retrieved must be cached  and reused by the Node Exporter
 // in order to prevent concurrent memory leaks.
 func NewMetricsClient(config *MetricsConfig, logger log.Logger) *MetricsClient {

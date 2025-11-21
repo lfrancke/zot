@@ -771,11 +771,13 @@ func Perf(
 	if outFmt == cicdFmt {
 		jsonOut, err := json.Marshal(cicdSummary)
 		if err != nil {
-			log.Fatal(err) // file closed on exit
-		}
-
-		if err := os.WriteFile(outFmt+".json", jsonOut, defaultFilePerms); err != nil {
-			log.Fatal(err)
+			log.Println(err)
+			zbError = true
+		} else {
+			if err := os.WriteFile(outFmt+".json", jsonOut, defaultFilePerms); err != nil {
+				log.Println(err)
+				zbError = true
+			}
 		}
 	}
 

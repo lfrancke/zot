@@ -1964,6 +1964,7 @@ func TestGarbageCollectImageManifest(t *testing.T) {
 						opts.rootDir = testDir
 
 						var store storageTypes.Driver
+
 						store, imgStore, _, _ = createObjectsStore(opts)
 						defer cleanupStorage(store, testDir)
 					} else {

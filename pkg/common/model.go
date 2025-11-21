@@ -137,8 +137,8 @@ type Annotation struct {
 }
 
 type ImageListWithCVEFixedResponse struct {
-	Errors                []ErrorGQL `json:"errors"`
 	ImageListWithCVEFixed `json:"data"`
+	Errors                []ErrorGQL `json:"errors"`
 }
 
 type ImageListWithCVEFixed struct {
@@ -146,8 +146,8 @@ type ImageListWithCVEFixed struct {
 }
 
 type ImagesForCve struct {
-	Errors           []ErrorGQL `json:"errors"`
 	ImagesForCVEList `json:"data"`
+	Errors           []ErrorGQL `json:"errors"`
 }
 
 type ImagesForCVEList struct {
@@ -155,8 +155,8 @@ type ImagesForCVEList struct {
 }
 
 type ImagesForDigest struct {
-	Errors              []ErrorGQL `json:"errors"`
 	ImagesForDigestList `json:"data"`
+	Errors              []ErrorGQL `json:"errors"`
 }
 
 type ImagesForDigestList struct {

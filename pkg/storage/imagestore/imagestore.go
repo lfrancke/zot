@@ -497,6 +497,7 @@ func (is *ImageStore) GetImageManifest(repo, reference string) ([]byte, godigest
 	var err error
 
 	is.RLock(&lockLatency)
+
 	defer func() {
 		is.RUnlock(&lockLatency)
 
@@ -549,6 +550,7 @@ func (is *ImageStore) PutImageManifest(repo, reference, mediaType string, //noli
 	var err error
 
 	is.Lock(&lockLatency)
+
 	defer func() {
 		is.Unlock(&lockLatency)
 
@@ -1315,11 +1317,9 @@ func (is *ImageStore) GetAllDedupeReposCandidates(digest godigest.Digest) ([]str
 	return repos, nil
 }
 
-/*
-	CheckBlob verifies a blob and returns true if the blob is correct
-
-If the blob is not found but it's found in cache then it will be copied over.
-*/
+// CheckBlob verifies a blob and returns true if the blob is correct
+//
+// If the blob is not found but it's found in cache then it will be copied over.
 func (is *ImageStore) CheckBlob(repo string, digest godigest.Digest) (bool, int64, error) {
 	var lockLatency time.Time
 

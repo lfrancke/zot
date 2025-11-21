@@ -215,7 +215,7 @@ func copyHeader(dst, src http.Header) {
 	}
 }
 
-// identifies and returns the cluster socket and index.
+// GetLocalMemberClusterSocket identifies and returns the cluster socket and index.
 // this is the socket which the scale out cluster members will use for
 // proxying and communication among each other.
 // returns index, socket, error.

@@ -25,15 +25,19 @@ const (
 	APIKeyTimeFormat             = time.RFC3339
 	// authz permissions.
 	// method actions.
+	// CreatePermission is an authz permission for method actions.
 	CreatePermission = "create"
 	ReadPermission   = "read"
 	UpdatePermission = "update"
 	DeletePermission = "delete"
 	// behaviour actions.
+	// DetectManifestCollisionPermission is an authz permission for behaviour actions.
 	DetectManifestCollisionPermission = "detectManifestCollision"
 	// zot scale-out hop count header.
+	// ScaleOutHopCountHeader is the zot scale-out hop count header.
 	ScaleOutHopCountHeader = "X-Zot-Cluster-Hop-Count"
 	// log string keys.
 	// these can be used together with the logger to add context to a log message.
+	// RepositoryLogKey is a log string key that can be used together with the logger to add context to a log message.
 	RepositoryLogKey = "repository"
 )

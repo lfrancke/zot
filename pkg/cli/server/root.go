@@ -202,7 +202,7 @@ func newVerifyFeatureCmd(conf *config.Config) *cobra.Command {
 	return verifyFeatureCmd
 }
 
-// "zot" - registry server.
+// NewServerRootCmd creates the "zot" registry server root command.
 func NewServerRootCmd() *cobra.Command {
 	showVersion := false
 	conf := config.New()

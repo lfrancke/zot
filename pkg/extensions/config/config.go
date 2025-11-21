@@ -27,8 +27,9 @@ type ExtensionConfig struct {
 
 type ImageTrustConfig struct {
 	BaseConfig `mapstructure:",squash"`
-	Cosign     bool
-	Notation   bool
+
+	Cosign   bool
+	Notation bool
 }
 
 type APIKeyConfig struct {
@@ -40,7 +41,8 @@ type MgmtConfig struct {
 }
 
 type LintConfig struct {
-	BaseConfig           `mapstructure:",squash"`
+	BaseConfig `mapstructure:",squash"`
+
 	MandatoryAnnotations []string
 }
 

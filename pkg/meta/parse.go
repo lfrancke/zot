@@ -303,7 +303,7 @@ func getNotationSignatureLayersInfo(
 	return layers, nil
 }
 
-// SetMetadataFromInput tries to set manifest metadata and update repo metadata by adding the current tag
+// SetImageMetaFromInput tries to set manifest metadata and update repo metadata by adding the current tag
 // (in case the reference is a tag). The function expects image manifests and indexes (multi arch images).
 func SetImageMetaFromInput(ctx context.Context, repo, reference, mediaType string, digest godigest.Digest, blob []byte,
 	imageStore stypes.ImageStore, metaDB mTypes.MetaDB, log log.Logger,

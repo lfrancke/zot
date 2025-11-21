@@ -111,6 +111,7 @@ func (d *RedisDriver) PutBlob(digest godigest.Digest, path string) error {
 	}
 
 	lock := d.rs.NewMutex(d.join(constants.RedisLocksBucket, digest.String()))
+
 	err = lock.Lock()
 	if err != nil {
 		d.log.Error().Err(err).Str("digest", digest.String()).Msg("failed to acquire redis lock")
@@ -278,6 +279,7 @@ func (d *RedisDriver) DeleteBlob(digest godigest.Digest, path string) error {
 	}
 
 	lock := d.rs.NewMutex(d.join(constants.RedisLocksBucket, digest.String()))
+
 	err = lock.Lock()
 	if err != nil {
 		d.log.Error().Err(err).Str("digest", digest.String()).Msg("failed to acquire redis lock")

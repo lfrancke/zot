@@ -149,7 +149,7 @@ func RandomString(n int) string {
 
 	ret := make([]byte, n)
 
-	for count := 0; count < n; count++ {
+	for count := range n {
 		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(letters))))
 		if err != nil {
 			panic(err)

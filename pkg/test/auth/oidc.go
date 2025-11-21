@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"net"
@@ -18,7 +19,7 @@ func MockOIDCRun() (*mockoidc.MockOIDC, error) {
 	mockServer, _ := mockoidc.NewServer(rsaKey)
 
 	// Create the net.Listener, kernel will chose a valid port
-	listener, _ := net.Listen("tcp", "127.0.0.1:0")
+	listener, _ := (&net.ListenConfig{}).Listen(context.Background(), "tcp", "127.0.0.1:0")
 
 	bearerMiddleware := func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(response http.ResponseWriter, req *http.Request) {

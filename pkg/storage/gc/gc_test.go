@@ -2201,7 +2201,7 @@ func TestGarbageCollectAndRetentionNoMetaDB(t *testing.T) {
 							So(repo, ShouldEqual, "")
 
 							continue
-						} else {
+						} else if i < len(expectedRepos) {
 							So(repo, ShouldEqual, expectedRepos[i])
 						}
 

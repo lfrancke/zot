@@ -243,7 +243,7 @@ func TestScheduler(t *testing.T) {
 		lastPriority := "medium"
 		lastMediumGenerator := "1"
 
-		for _, line := range strings.Split(strings.TrimSuffix(string(data), "\n"), "\n") {
+		for line := range strings.SplitSeq(strings.TrimSuffix(string(data), "\n"), "\n") {
 			if !strings.Contains(line, "priority task; index: ") {
 				continue
 			}

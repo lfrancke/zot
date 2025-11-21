@@ -45,6 +45,7 @@ func TestGetExensionsDisabled(t *testing.T) {
 		ctlr := makeController(conf, t.TempDir())
 
 		cm := test.NewControllerManager(ctlr)
+
 		cm.StartAndWait(port)
 		defer cm.StopServer()
 

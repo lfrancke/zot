@@ -174,7 +174,7 @@ func ValidateManifest(imgStore storageTypes.ImageStore, repo, reference, mediaTy
 	return nil
 }
 
-// Returns the canonical digest or the digest provided by the reference if any
+// GetAndValidateRequestDigest returns the canonical digest or the digest provided by the reference if any
 // Per spec, the canonical digest would always be returned to the client in
 // request headers, but that does not make sense if the client requested a different digest algorithm
 // See https://github.com/opencontainers/distribution-spec/issues/494
@@ -221,7 +221,6 @@ func CheckIfIndexNeedsUpdate(index *ispec.Index, desc *ispec.Descriptor,
 	updateIndex := true
 
 	for midx, manifest := range index.Manifests {
-		manifest := manifest
 		if reference == manifest.Digest.String() {
 			// nothing changed, so don't update
 			updateIndex = false
@@ -398,11 +397,9 @@ func RemoveManifestDescByReference(index *ispec.Index, reference string, detectC
 	return removedManifest, nil
 }
 
-/*
-Unmarshal an image index and for all manifests in that
-index, ensure that they do not have a name or they are not in other
-manifest indexes else GC can never clean them.
-*/
+// UpdateIndexWithPrunedImageManifests unmarshals an image index and for all manifests in that
+// index, ensures that they do not have a name or they are not in other
+// manifest indexes else GC can never clean them.
 func UpdateIndexWithPrunedImageManifests(imgStore storageTypes.ImageStore, index *ispec.Index, repo string,
 	desc ispec.Descriptor, oldDgst godigest.Digest, log zlog.Logger,
 ) error {
@@ -428,14 +425,11 @@ func UpdateIndexWithPrunedImageManifests(imgStore storageTypes.ImageStore, index
 	return nil
 }
 
-/*
-Before an image index manifest is pushed to a repo, its constituent manifests
-are pushed first, so when updating/removing this image index manifest, we also
-need to determine if there are other image index manifests which refer to the
-same constitutent manifests so that they can be garbage-collected correctly
-
-PruneImageManifestsFromIndex is a helper routine to achieve this.
-*/
+// PruneImageManifestsFromIndex is a helper routine to achieve the following:
+// Before an image index manifest is pushed to a repo, its constituent manifests
+// are pushed first, so when updating/removing this image index manifest, we also
+// need to determine if there are other image index manifests which refer to the
+// same constitutent manifests so that they can be garbage-collected correctly.
 func PruneImageManifestsFromIndex(imgStore storageTypes.ImageStore, repo string, digest godigest.Digest, //nolint:gocyclo,lll
 	outIndex ispec.Index, otherImgIndexes []ispec.Descriptor, log zlog.Logger,
 ) ([]ispec.Descriptor, error) {
@@ -759,7 +753,7 @@ func GetReferrers(imgStore storageTypes.ImageStore, repo string, gdigest godiges
 	return index, nil
 }
 
-// Get blob descriptor from it's manifest contents, if blob can not be found it will return error.
+// GetBlobDescriptorFromRepo gets blob descriptor from it's manifest contents, if blob can not be found it will return error.
 func GetBlobDescriptorFromRepo(imgStore storageTypes.ImageStore, repo string, blobDigest godigest.Digest,
 	log zlog.Logger,
 ) (ispec.Descriptor, error) {
@@ -870,12 +864,9 @@ func IsEmptyLayersError(err error) bool {
 	return false
 }
 
-/*
-	DedupeTaskGenerator takes all blobs paths found in the storage.imagestore and groups them by digest
-
-for each digest and based on the dedupe value it will dedupe or restore deduped blobs to the original state(undeduped)\
-by creating a task for each digest and pushing it to the task scheduler.
-*/
+// DedupeTaskGenerator takes all blobs paths found in the storage.imagestore and groups them by digest
+// for each digest and based on the dedupe value it will dedupe or restore deduped blobs to the original state(undeduped)
+// by creating a task for each digest and pushing it to the task scheduler.
 type DedupeTaskGenerator struct {
 	ImgStore storageTypes.ImageStore
 	// storage dedupe value

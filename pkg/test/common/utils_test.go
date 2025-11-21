@@ -16,6 +16,7 @@ import (
 func TestWaitTillTrivyDBDownloadStarted(t *testing.T) {
 	Convey("finishes successfully", t, func() {
 		tempDir := t.TempDir()
+
 		go func() {
 			tcommon.WaitTillTrivyDBDownloadStarted(tempDir)
 		}()

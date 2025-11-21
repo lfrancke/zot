@@ -1722,6 +1722,7 @@ finish:
 				rh.c.Log.Error().Err(err).Str("blobUpload", sessionID).Str("repository", name).
 					Msg("failed to remove blobUpload in repo")
 			}
+
 			response.WriteHeader(http.StatusInternalServerError)
 		}
 
@@ -1963,7 +1964,7 @@ func (rh *RouteHandler) Logout(response http.ResponseWriter, request *http.Reque
 	response.WriteHeader(http.StatusOK)
 }
 
-// github Oauth2 CodeExchange callback.
+// GithubCodeExchangeCallback is the github Oauth2 CodeExchange callback.
 func (rh *RouteHandler) GithubCodeExchangeCallback() rp.CodeExchangeCallback[*oidc.IDTokenClaims] {
 	return func(w http.ResponseWriter, r *http.Request,
 		tokens *oidc.Tokens[*oidc.IDTokenClaims], state string, relyingParty rp.RelyingParty,
@@ -1998,7 +1999,7 @@ func (rh *RouteHandler) GithubCodeExchangeCallback() rp.CodeExchangeCallback[*oi
 	}
 }
 
-// Openid CodeExchange callback.
+// OpenIDCodeExchangeCallback is the Openid CodeExchange callback.
 func (rh *RouteHandler) OpenIDCodeExchangeCallback() rp.CodeExchangeUserinfoCallback[
 	*oidc.IDTokenClaims,
 	*oidc.UserInfo,

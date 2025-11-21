@@ -53,6 +53,7 @@ func TestNew(t *testing.T) {
 
 func isChannelDrained(ch chan prometheus.Metric) bool {
 	time.Sleep(SleepTime)
+
 	select {
 	case <-ch:
 		return false

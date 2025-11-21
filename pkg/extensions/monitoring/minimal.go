@@ -110,11 +110,13 @@ func GetStorageLatencyBuckets() []float64 {
 	return []float64{.001, .01, 0.1, 1, 5, 10, 15, 30, 60, math.MaxFloat64}
 }
 
-// implements the MetricServer interface.
+// SendMetric implements the MetricServer interface.
 func (ms *metricServer) SendMetric(metric interface{}) {
 	ms.lock.RLock()
+
 	if ms.enabled {
 		ms.lock.RUnlock()
+
 		ms.reqChan <- metric
 	} else {
 		ms.lock.RUnlock()
@@ -127,10 +129,13 @@ func (ms *metricServer) ForceSendMetric(metric interface{}) {
 
 func (ms *metricServer) ReceiveMetrics() interface{} {
 	ms.lock.Lock()
+
 	if !ms.enabled {
 		ms.enabled = true
 	}
+
 	ms.lock.Unlock()
+
 	ms.cacheChan <- MetricsCopy{}
 
 	return <-ms.cacheChan
@@ -159,6 +164,7 @@ func (ms *metricServer) Run() {
 			default:
 				t := metricsScrapeCheckInterval
 				time.Sleep(t)
+
 				select {
 				case sendAfter <- t:
 				case <-ms.stopChan:
@@ -196,6 +202,7 @@ func (ms *metricServer) Run() {
 			for i, hv := range ms.cache.Histograms {
 				metrics.Histograms[i] = *hv
 			}
+
 			ms.cacheChan <- metrics
 		case m := <-ms.reqChan:
 			switch v := m.(type) {
@@ -218,12 +225,14 @@ func (ms *metricServer) Run() {
 			// Check if we didn't receive a metrics scrape in a while and if so,
 			// disable metrics (possible node exporter down/crashed)
 			ms.lock.Lock()
+
 			if ms.enabled {
 				lastCheckInterval := time.Since(ms.lastCheck)
 				if lastCheckInterval > metricsScrapeTimeout {
 					ms.enabled = false
 				}
 			}
+
 			ms.lock.Unlock()
 		}
 	}
@@ -264,7 +273,7 @@ func NewMetricsServer(enabled bool, log log.Logger) MetricServer {
 	return ms
 }
 
-// contains a map with key=CounterName and value=CounterLabels.
+// GetCounters returns a map with key=CounterName and value=CounterLabels.
 func GetCounters() map[string][]string {
 	return map[string][]string{
 		httpConnRequests:    {"method", "code"},

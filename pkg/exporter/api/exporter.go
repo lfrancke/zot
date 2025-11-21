@@ -30,7 +30,7 @@ type Collector struct {
 	invalidChars *regexp.Regexp
 }
 
-// Implements prometheus.Collector interface.
+// Describe implements prometheus.Collector interface.
 func (zc Collector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metricDescription := range zc.MetricsDesc {
 		ch <- metricDescription
@@ -56,6 +56,7 @@ func (zc Collector) Collect(ch chan<- prometheus.Metric) {
 
 	for _, c := range metrics.Counters {
 		name := zc.invalidChars.ReplaceAllLiteralString(c.Name, "_")
+
 		name += "_total"
 		ch <- prometheus.MustNewConstMetric(
 			zc.MetricsDesc[name], prometheus.CounterValue, float64(c.Count), c.LabelValues...)
@@ -63,6 +64,7 @@ func (zc Collector) Collect(ch chan<- prometheus.Metric) {
 
 	for _, summary := range metrics.Summaries {
 		mname := zc.invalidChars.ReplaceAllLiteralString(summary.Name, "_")
+
 		name := mname + "_count"
 		ch <- prometheus.MustNewConstMetric(
 			zc.MetricsDesc[name], prometheus.CounterValue, float64(summary.Count), summary.LabelValues...)
@@ -74,6 +76,7 @@ func (zc Collector) Collect(ch chan<- prometheus.Metric) {
 
 	for _, h := range metrics.Histograms {
 		mname := zc.invalidChars.ReplaceAllLiteralString(h.Name, "_")
+
 		name := mname + "_count"
 		ch <- prometheus.MustNewConstMetric(
 			zc.MetricsDesc[name], prometheus.CounterValue, float64(h.Count), h.LabelValues...)

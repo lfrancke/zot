@@ -167,6 +167,7 @@ func (scheduler *Scheduler) metricsWorker() {
 		if scheduler.inShutdown() {
 			return
 		}
+
 		select {
 		case <-scheduler.metricsChan:
 			ticker.Stop()
@@ -215,10 +216,8 @@ func (scheduler *Scheduler) metricsWorker() {
 	}
 }
 
-/*
-Scheduler can be stopped by calling Shutdown().
-it will wait for all tasks being run to finish their work before exiting.
-*/
+// Shutdown can be stopped by calling Shutdown().
+// it will wait for all tasks being run to finish their work before exiting.
 func (scheduler *Scheduler) Shutdown() {
 	defer scheduler.workerWg.Wait()
 

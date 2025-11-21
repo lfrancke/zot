@@ -668,7 +668,9 @@ storage:
 			},
 			{
 				"Should fail verify if session driver is enabled and sessionKeysFile present",
-				[]byte(fmt.Sprintf(`{
+				func() []byte {
+					content := make([]byte, 0)
+					content = fmt.Appendf(content, `{
 					"storage":{
 						"rootDirectory":"/tmp/zot"
 					},
@@ -698,7 +700,9 @@ storage:
 							"enable": true
 						}
 					}
-				}`, tmpSessionKeysFile.Name())),
+				}`, tmpSessionKeysFile.Name())
+					return content
+				}(),
 				false,
 				zerr.ErrBadConfig.Error() + ": session keys not supported when redis session driver is used!",
 			},
@@ -1562,13 +1566,13 @@ storage:
 		err = tmpCredsFile.Close()
 		So(err, ShouldBeNil)
 
-		content = []byte(fmt.Sprintf(`{"distSpecVersion":"1.1.1","storage":{"rootDirectory":"/tmp/zot"},
+		content = make([]byte, 0)
+		content = fmt.Appendf(content, `{"distSpecVersion":"1.1.1","storage":{"rootDirectory":"/tmp/zot"},
 			"http":{"address":"127.0.0.1","port":"8080","realm":"zot",
 			"auth":{"openid":{"providers":{"oidc":{"issuer":"http://127.0.0.1:5556/dex",
 			"credentialsFile":"%s","scopes":["openid"]}}}}},
 			"log":{"level":"debug"}}`,
-			tmpCredsFile.Name()),
-		)
+			tmpCredsFile.Name())
 		_, err = tmpfile.Write(content)
 		So(err, ShouldBeNil)
 		err = tmpfile.Close()
@@ -1677,12 +1681,12 @@ storage:
 		err = tmpCredsFile.Close()
 		So(err, ShouldBeNil)
 
-		content = []byte(fmt.Sprintf(`{ "distSpecVersion": "1.1.1",
-			"storage": { "rootDirectory": "/tmp/zot" }, "http": { "address": "127.0.0.1", "port": "8080", 
-			"auth":{"htpasswd":{"path":"test/data/htpasswd"}, "sessionKeysFile": "%s", 
+		content = make([]byte, 0)
+		content = fmt.Appendf(content, `{ "distSpecVersion": "1.1.1",
+			"storage": { "rootDirectory": "/tmp/zot" }, "http": { "address": "127.0.0.1", "port": "8080",
+			"auth":{"htpasswd":{"path":"test/data/htpasswd"}, "sessionKeysFile": "%s",
 			"failDelay": 5 } }, "log": { "level": "debug" } }`,
-			tmpCredsFile.Name()),
-		)
+			tmpCredsFile.Name())
 
 		_, err = tmpFile.Write(content)
 		So(err, ShouldBeNil)
@@ -1712,12 +1716,12 @@ storage:
 		err = tmpCredsFile.Close()
 		So(err, ShouldBeNil)
 
-		content = []byte(fmt.Sprintf(`{ "distSpecVersion": "1.1.1",
-			"storage": { "rootDirectory": "/tmp/zot" }, "http": { "address": "127.0.0.1", "port": "8080", 
-			"auth":{"htpasswd":{"path":"test/data/htpasswd"}, "sessionKeysFile": "%s", 
+		content = make([]byte, 0)
+		content = fmt.Appendf(content, `{ "distSpecVersion": "1.1.1",
+			"storage": { "rootDirectory": "/tmp/zot" }, "http": { "address": "127.0.0.1", "port": "8080",
+			"auth":{"htpasswd":{"path":"test/data/htpasswd"}, "sessionKeysFile": "%s",
 			"failDelay": 5 } }, "log": { "level": "debug" } }`,
-			tmpCredsFile.Name()),
-		)
+			tmpCredsFile.Name())
 
 		_, err = tmpFile.Write(content)
 		So(err, ShouldBeNil)
@@ -2714,6 +2718,7 @@ func runCLIWithConfig(tempDir string, config string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 
 	os.Args = []string{"cli_test", "serve", cfgfile.Name()}
 

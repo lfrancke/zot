@@ -274,12 +274,13 @@ func TestHTPasswdWatcher(t *testing.T) {
 			So(test.WaitForLogMessages(logBuffer, "htpasswd watcher terminating...", 1, 5*time.Second), ShouldBeTrue)
 
 			// Test with very long file path
-			longPath := "/tmp/"
+			var longPath strings.Builder
+			longPath.WriteString("/tmp/")
 			for i := 0; i < 100; i++ {
-				longPath += "verylongdirname"
+				longPath.WriteString("verylongdirname")
 			}
-			longPath += "/htpasswd"
-			htw3, err := api.NewHTPasswdWatcher(htp, longPath)
+			longPath.WriteString("/htpasswd")
+			htw3, err := api.NewHTPasswdWatcher(htp, longPath.String())
 			So(err, ShouldBeNil)
 			So(func() { htw3.Run() }, ShouldNotPanic)
 			time.Sleep(10 * time.Millisecond)
