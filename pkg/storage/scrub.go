@@ -26,13 +26,17 @@ const (
 	colStatusIndex
 	colAffectedBlobIndex
 	colErrorIndex
+)
 
+const (
 	imageNameWidth    = 32
 	tagWidth          = 24
 	statusWidth       = 8
 	affectedBlobWidth = 64
 	errorWidth        = 8
+)
 
+const (
 	statusAffected = "affected"
 	statusOK       = "ok"
 )
